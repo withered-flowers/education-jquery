@@ -9,13 +9,14 @@
     <link rel="stylesheet" href="./index.css" />
   </head>
   <body>
-    <h1>Aplikasi Jejadian</h1>
+    <h1>Aplikasi Baru Belajar jQuery</h1>
 
     <section>
       <h3>Sembunyi yuk !</h3>
 
-      <button>Sembunyiin</button>
-      <button>Tampilin</button>
+      <!-- Kasih identitas dulu supaya bisa dipilih -->
+      <button id="btnSembunyi">Sembunyiin</button>
+      <button id="btnTampil">Tampilin</button>
     </section>
 
     <section class="todo">
@@ -26,22 +27,27 @@
       <section>
         <h3>Login Form</h3>
 
-        <form action="">
-          <input type="text" name="" id="" placeholder="Masukkan Username" />
-          <button>Let's Go</button>
+        <form>
+          <input
+            type="text"
+            name=""
+            id="loginName"
+            placeholder="Masukkan Username"
+          />
+          <button id="btnLogin">Let's Go</button>
         </form>
 
         <p>
           <span>Token sekarang adalah:</span>
-          <span><strong>undefined</strong></span>
+          <span><strong id="tokenYangTerlihat">undefined</strong></span>
         </p>
       </section>
 
       <section>
         <h3>ToDo Form</h3>
 
-        <form action="">
-          <input type="text" name="" id="" placeholder="Tambah Todo" />
+        <form id="addTodoForm">
+          <input type="text" id="newTodo" placeholder="Tambah Todo" />
           <button type="submit">Tambah ToDo</button>
         </form>
       </section>
@@ -57,11 +63,148 @@
               <th>isCompleted</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody id="todosContent">
+            <!-- <tr>
+              <td>1</td>
+              <td>Waduh, bahan baru lagi</td>
+              <td>false</td>
+            </tr> -->
+          </tbody>
         </table>
       </section>
 
       <footer class="todo-footer">&copy; Unknown Origin - 2022</footer>
     </section>
+
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      const todos = [
+        {
+          id: 1,
+          name: "Waduh, bahan baru lagi",
+          isCompleted: false,
+          by: "Anya",
+        },
+        {
+          id: 2,
+          name: "Jangan lupa nyatet yah",
+          isCompleted: false,
+          by: "Forger",
+        },
+        {
+          id: 3,
+          name: "Namanya jQuery",
+          isCompleted: false,
+          by: "Yor",
+        },
+      ];
+
+      $(document).ready(function () {
+        // ambil class todo
+        // const elementTodo = $(".todo");
+
+        // console.log(elementTodo);
+
+        // ambil class todo kemudian kita pengen hide (hidden)
+        // $(".todo").hide();
+        // $(".todo").show();
+
+        // pilih si id btnTampil
+        $("#btnTampil").on("click", function () {
+          console.log("Button tampil ditekan");
+          // milih si class todo dan tampilkan
+          $(".todo").show();
+        });
+
+        $("#btnSembunyi").on("click", function () {
+          console.log("Button sembunyiin ditekan");
+          // milih si class todo dan sembunyikan
+          $(".todo").hide();
+        });
+
+        // untuk login
+        $("#btnLogin").on("click", function (event) {
+          event.preventDefault();
+          // Ambil input username punya value
+          const username = $("#loginName").val();
+          console.log(username);
+
+          // Tembak / minta data dari backend
+          $.ajax("http://localhost:3000/login", {
+            method: "POST",
+            data: {
+              username,
+            },
+          })
+            // Apabila AJAX berhasil
+            .done(function (resp) {
+              console.log("success", resp);
+
+              const token = resp.data.access_token;
+
+              console.log(token);
+
+              $("#tokenYangTerlihat").text(token);
+
+              // simpan si token di localStorage
+              localStorage.setItem("aksesToken", token);
+            })
+            // Apabila AJAX gagal
+            .fail(function (errResp) {
+              console.log("error", errResp);
+            });
+        });
+
+        $("#addTodoForm").on("submit", function (event) {
+          // supaya ga refresh
+          event.preventDefault();
+
+          const valNewTodo = $("#newTodo").val();
+
+          // tembak ke POST /todos
+          $.ajax("http://localhost:3000/todos", {
+            method: "POST",
+            data: {
+              todoName: valNewTodo,
+            },
+            headers: {
+              access_token: localStorage.getItem("aksesToken"),
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          })
+            .done(function (resp) {
+              console.log(resp);
+            })
+            .fail(function (errResp) {
+              console.log(errResp);
+            });
+        });
+
+        // Kita harus memilih si todoContent
+
+        // array of string
+        const elementUntukDitambahkanKedalamTodosContent = todos.map((todo) => {
+          return `
+            <tr>
+              <td>${todo.id}</td>
+              <td>${todo.name}</td>
+              <td>${todo.isCompleted}</td>
+            </tr> 
+          `;
+        });
+
+        // .html .text .innerHTML .append
+        $("#todosContent").html(elementUntukDitambahkanKedalamTodosContent);
+
+        if (localStorage.getItem("aksesToken")) {
+          $("#tokenYangTerlihat").text(localStorage.getItem("aksesToken"));
+        }
+      });
+    </script>
   </body>
 </html>

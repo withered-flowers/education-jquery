@@ -5,6 +5,14 @@
 
 ### POST /login
 
+#### Request
+- Body
+    ```json
+    {
+      username: String
+    }
+    ```
+
 #### Response
 _200 - OK_
 
@@ -12,13 +20,10 @@ _200 - OK_
     ```json
     {
       "statusCode": 200,
-      "data": [
-        {
+      "data": {
           "access_token": String
-        },
-        ...
-      ]
-    }
+      },
+    }    
     ```
 
 ### GET /todos
