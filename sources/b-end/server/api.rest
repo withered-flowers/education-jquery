@@ -1,0 +1,21 @@
+@host=http://localhost:3000
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikpvbm8iLCJpYXQiOjE2NTM5MTQ2ODIsImV4cCI6MTY1MzkyMTg4Mn0.8brVlHNPZ3AF8Lz7_y7fcsmXRRI5xAqOf1L8R0yKNlE
+
+###
+
+POST {{host}}/login
+Content-Type: application/x-www-form-urlencoded
+
+username=Jono
+
+###
+
+GET {{host}}/todos
+
+###
+
+POST {{host}}/todos
+Content-Type: application/x-www-form-urlencoded
+access_token: {{token}}
+
+todoName=Belajar Mata-mata

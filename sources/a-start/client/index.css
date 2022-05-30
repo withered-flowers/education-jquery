@@ -1,0 +1,14 @@
+.todo {
+  background-color: #f1f1f1;
+  padding: 0.25em;
+  margin: 1em 0em;
+}
+
+.todo-header,
+.todo-footer {
+  text-align: center;
+}
+
+.todo-footer {
+  margin: 1.5em 0em;
+}
