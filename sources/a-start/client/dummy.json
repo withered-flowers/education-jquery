@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Waduh, bahan baru lagi",
+    "isCompleted": false,
+    "by": "Anya"
+  },
+  {
+    "id": 2,
+    "name": "Jangan lupa nyatet yah",
+    "isCompleted": false,
+    "by": "Forger"
+  },
+  {
+    "id": 3,
+    "name": "Namanya jQuery",
+    "isCompleted": false,
+    "by": "Yor"
+  }
+]
